@@ -1,6 +1,6 @@
 {
   "name": "font-cmap",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Parse CMap of a TrueType/OpenType font file buffer",
   "repository": "shinnn/node-font-cmap",
   "author": {
