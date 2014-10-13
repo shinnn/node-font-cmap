@@ -1,0 +1,58 @@
+{
+  "name": "font-cmap",
+  "version": "0.0.0",
+  "description": "Parse CMap of a TrueType/OpenType font file buffer",
+  "repository": "shinnn/node-font-cmap",
+  "author": {
+    "name": "Shinnosuke Watanabe",
+    "url": "https://github.com/shinnn"
+  },
+  "scripts": {
+    "pretest": "eslint *.js test/test.js & jscs .",
+    "test": "node test/test.js | tap-spec",
+    "coverage": "istanbul cover test/test.js",
+    "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/shinnn/node-font-cmap/blob/master/LICENSE"
+    }
+  ],
+  "files": [
+    "cli.js",
+    "index.js",
+    "LICENSE"
+  ],
+  "bin": "cli.js",
+  "keywords": [
+    "buffer",
+    "cmap",
+    "table",
+    "font",
+    "glyph",
+    "index",
+    "id",
+    "code-point",
+    "json",
+    "parse",
+    "cli",
+    "command-line"
+  ],
+  "dependencies": {
+    "chalk": "^0.5.1",
+    "get-stdin": "^3.0.0",
+    "minimist": "^1.1.0",
+    "opentype.js": "git://github.com/nodebox/opentype.js#0a73d0fdf5a43dd12568636d9823dfde22a970d9"
+  },
+  "devDependencies": {
+    "eslint": "^0.8.2",
+    "font-awesome": "^4.2.0",
+    "istanbul": "^0.3.2",
+    "istanbul-coveralls": "^1.0.1",
+    "jscs": "^1.6.2",
+    "lodash": "^2.4.1",
+    "tap-spec": "^1.0.0",
+    "tape": "^3.0.0"
+  }
+}
