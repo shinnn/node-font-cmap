@@ -12,7 +12,7 @@ Parse [CMap](http://www.microsoft.com/typography/otspec/cmap.htm) of a TrueType/
 var fs = require('fs');
 var fontCmap = require('font-cmap');
 
-var buf = fs.readFIleSync('bower_components/font-awesome/fonts/FontAwesome.otf');
+var buf = fs.readFileSync('bower_components/font-awesome/fonts/FontAwesome.otf');
 
 fontCmap(buf); //=> {"32": 1, "168": 6, "169": 12, "174": 10, ... }
 ```
@@ -46,7 +46,7 @@ It returns an object of a CMap table in the form:
 }
 ```
 
-[Here](https://raw.githubusercontent.com/shinnn/node-font-cmap/master/test/fixture.json) is the real-life example, the result of parsing [Font Awesome](http://fortawesome.github.io/Font-Awesome/) CMap table.
+[Here](https://raw.githubusercontent.com/shinnn/node-font-cmap/master/test/fixture.json) is a real-life example, the result of parsing [Font Awesome](http://fortawesome.github.io/Font-Awesome/) CMap table.
 
 ## CLI
 
