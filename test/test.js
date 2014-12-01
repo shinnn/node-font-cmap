@@ -140,31 +140,28 @@ test('"font-cmap" command outside a TTY context', function(t) {
   t.plan(3);
 
   var cmd = function(args) {
-    var cp = spawn('node', [pkg.bin].concat(args), {
+    return spawn('node', [pkg.bin].concat(args), {
       stdio: ['pipe', null, null]
     });
-    cp.stdout.setEncoding('utf8');
-    cp.stderr.setEncoding('utf8');
-    return cp;
   };
 
   var cp = cmd([]);
-  cp.stdout.on('data', function(output) {
-    t.equal(output, jsonText, 'should parse stdin and print a valid JSON.');
+  cp.stdout.on('data', function(buf) {
+    t.equal(buf.toString(), jsonText, 'should parse stdin and print a valid JSON.');
   });
   cp.stdin.end(otfFont);
 
-  var err = '';
+  var err = [];
   var cpErr = cmd([]);
   cpErr.on('close', function(code) {
     t.notEqual(code, 0, 'should fail when stdin receives unsupported file buffer.');
     t.ok(
-      /Unsupported/.test(err),
+      /Unsupported/.test(Buffer.concat(err).toString()),
       'should print usage information when stdin receives unsupported file buffer.'
     );
   });
-  cpErr.stderr.on('data', function(output) {
-    err += output;
+  cpErr.stderr.on('data', function(buf) {
+    err.push(buf);
   });
   cpErr.stdin.end(eotFont);
 });
