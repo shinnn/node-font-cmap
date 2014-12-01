@@ -41,18 +41,18 @@
   ],
   "dependencies": {
     "chalk": "^0.5.1",
-    "get-stdin": "^3.0.0",
+    "get-stdin": "^3.0.2",
     "minimist": "^1.1.0",
-    "opentype.js": "git://github.com/nodebox/opentype.js#0a73d0fdf5a43dd12568636d9823dfde22a970d9"
+    "opentype.js": "^0.4.3"
   },
   "devDependencies": {
-    "eslint": "^0.9.2",
+    "eslint": "^0.10.0",
     "font-awesome": "^4.2.0",
     "istanbul": "^0.3.2",
     "istanbul-coveralls": "^1.0.1",
-    "jscs": "^1.7.3",
+    "jscs": "^1.8.1",
     "lodash": "^2.4.1",
-    "tap-spec": "^1.0.1",
-    "tape": "^3.0.1"
+    "tap-spec": "^2.1.0",
+    "tape": "^3.0.3"
   }
 }
