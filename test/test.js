@@ -4,9 +4,9 @@ var fs = require('fs');
 var path = require('path');
 var spawn = require('child_process').spawn;
 
-var isPlainObject = require('lodash').isPlainObject;
+var isPlainObject = require('lodash.isplainobject');
 var test = require('tape');
-var fontCmap = require('../');
+var fontCmap = require('..');
 
 var pkg = require('../package.json');
 
@@ -18,36 +18,39 @@ var ttfFont = fs.readFileSync(ttfFontPath);
 var eotFontPath = path.join(fontDir, 'fontawesome-webfont.eot');
 var eotFont = fs.readFileSync(eotFontPath);
 
-var jsonText = fs.readFileSync('test/fixture.json').toString();
+var jsonText = fs.readFileSync('test/fixture.json', 'utf8');
 var cmapData = JSON.parse(jsonText);
 
 test('fontCmap()', function(t) {
-  t.plan(6);
+  t.plan(7);
 
-  t.deepEqual(
-    fontCmap(otfFont), cmapData,
-    'should create glyph map object of OTF.'
-  );
+  t.equal(fontCmap.name, 'fontCmap', 'should have a function name.');
+
+  t.deepEqual(fontCmap(otfFont), cmapData, 'should create glyph map object of OTF.');
 
   t.ok(isPlainObject(fontCmap(ttfFont)), 'should create glyph map object of TTF.');
 
   t.throws(
-    fontCmap.bind(null), /TypeError/,
+    fontCmap.bind(null),
+    /TypeError/,
     'should throw an error when it takes no arguments.'
   );
 
   t.throws(
-    fontCmap.bind(null, ['foo']), /TypeError/,
+    fontCmap.bind(null, ['foo']),
+    /TypeError.*must be a buffer\./,
     'should throw an error when it takes a non-buffer argument.'
   );
 
   t.throws(
-    fontCmap.bind(null, eotFont), /Unsupported/,
+    fontCmap.bind(null, eotFont),
+    /Unsupported/,
     'should throw an error when it takes a buffer of unsupported font file.'
   );
 
   t.throws(
-    fontCmap.bind(null, fs.readFileSync(__filename)), /Unsupported/,
+    fontCmap.bind(null, fs.readFileSync(__filename)),
+    /Unsupported/,
     'should throw an error when it takes a buffer of non-font file.'
   );
 });
@@ -64,33 +67,40 @@ test('"font-cmap" command inside a TTY context', function(t) {
     return cp;
   };
 
-  cmd([otfFontPath]).stdout.on('data', function(output) {
+  var outputJson = '';
+
+  cmd([otfFontPath])
+  .on('close', function() {
     t.doesNotThrow(
-      JSON.parse.bind(null, output),
+      JSON.parse.bind(null, outputJson),
       'should print a valid JSON.'
     );
+  })
+  .stdout.on('data', function(data) {
+    outputJson += data;
   });
 
   cmd([ttfFontPath, '--min']).stdout.on('data', function(output) {
     t.notOk(
       / /.test(output),
-      'should remove whitespaces from output using --min flag'
+      'should remove whitespaces from output using --min flag.'
     );
   });
 
   cmd([ttfFontPath, '-m']).stdout.on('data', function(output) {
-    t.notOk(/\ /.test(output), 'should accept --min alias');
+    t.notOk(/\ /.test(output), 'should use --m as an alias of --min.');
   });
 
   cmd(['--version']).stdout.on('data', function(output) {
     t.equal(
-      output, pkg.version + '\n',
+      output,
+      pkg.version + '\n',
       'should print version using --version flag.'
     );
   });
 
   cmd(['-v']).stdout.on('data', function(output) {
-    t.equal(output, pkg.version + '\n', 'should accept -v alias.');
+    t.equal(output, pkg.version + '\n', 'should use -v as an alias of --version.');
   });
 
   cmd(['--help']).stdout.on('data', function(output) {
@@ -98,7 +108,7 @@ test('"font-cmap" command inside a TTY context', function(t) {
   });
 
   cmd(['-h']).stdout.on('data', function(output) {
-    t.ok(/Usage/.test(output), 'should accept -h alias.');
+    t.ok(/Usage/.test(output), 'should use -h as an alias of --help.');
   });
 
   cmd([]).stdout.on('data', function(output) {
@@ -140,28 +150,45 @@ test('"font-cmap" command outside a TTY context', function(t) {
   t.plan(3);
 
   var cmd = function(args) {
-    return spawn('node', [pkg.bin].concat(args), {
+    var tmpCp = spawn('node', [pkg.bin].concat(args), {
       stdio: ['pipe', null, null]
     });
+    tmpCp.stdout.setEncoding('utf8');
+    tmpCp.stderr.setEncoding('utf8');
+    return tmpCp;
   };
 
+  var outputJson = '';
   var cp = cmd([]);
-  cp.stdout.on('data', function(buf) {
-    t.equal(buf.toString(), jsonText, 'should parse stdin and print a valid JSON.');
+
+  cp.on('close', function() {
+    t.equal(
+      outputJson,
+      jsonText,
+      'should parse stdin and print a valid JSON.'
+    );
   });
+
+  cp.stdout.on('data', function(data) {
+    outputJson += data;
+  });
+
   cp.stdin.end(otfFont);
 
-  var err = [];
+  var err = '';
   var cpErr = cmd([]);
+
   cpErr.on('close', function(code) {
     t.notEqual(code, 0, 'should fail when stdin receives unsupported file buffer.');
     t.ok(
-      /Unsupported/.test(Buffer.concat(err).toString()),
+      /Unsupported/.test(err),
       'should print usage information when stdin receives unsupported file buffer.'
     );
   });
-  cpErr.stderr.on('data', function(buf) {
-    err.push(buf);
+
+  cpErr.stderr.on('data', function(data) {
+    err += data;
   });
+
   cpErr.stdin.end(eotFont);
 });
