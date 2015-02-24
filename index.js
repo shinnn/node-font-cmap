@@ -4,15 +4,19 @@
 */
 'use strict';
 
+var isBuffer = require('is-buffer');
 var opentype = require('opentype.js');
 
 module.exports = function fontCmap(fontBuf) {
   if (arguments.length === 0) {
-    throw new TypeError('One argument (buffer) required.');
+    throw new TypeError('font-cmap requires one argument (buffer).');
   }
 
-  if (!Buffer.isBuffer(fontBuf)) {
-    throw new TypeError(fontBuf + ' is not a buffer.');
+  if (!isBuffer(fontBuf)) {
+    throw new TypeError(
+      fontBuf +
+      ' is not a buffer. The first argument to font-cmap must be a buffer.'
+    );
   }
 
   var arrayBuffer = new Uint8Array(fontBuf).buffer;
