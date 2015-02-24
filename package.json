@@ -8,9 +8,9 @@
     "url": "https://github.com/shinnn"
   },
   "scripts": {
-    "pretest": "eslint *.js test/test.js & jscs .",
+    "pretest": "eslint *.js test/test.js & jscs test/test.js",
     "test": "node test/test.js | tap-spec",
-    "coverage": "istanbul cover test/test.js",
+    "coverage": "istanbul cover --no-default-excludes -x=node_modules/** test/test.js",
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
   "licenses": [
@@ -21,8 +21,7 @@
   ],
   "files": [
     "cli.js",
-    "index.js",
-    "LICENSE"
+    "index.js"
   ],
   "bin": "cli.js",
   "keywords": [
@@ -40,19 +39,27 @@
     "command-line"
   ],
   "dependencies": {
-    "chalk": "^0.5.1",
-    "get-stdin": "^3.0.2",
+    "chalk": "^1.0.0",
+    "get-stdin": "^4.0.1",
+    "is-buffer": "^1.0.1",
     "minimist": "^1.1.0",
-    "opentype.js": "^0.4.3"
+    "opentype.js": "^0.4.4",
+    "sum-up": "^1.0.1"
   },
   "devDependencies": {
-    "eslint": "^0.10.0",
-    "font-awesome": "^4.2.0",
-    "istanbul": "^0.3.2",
+    "eslint": "^0.15.0",
+    "font-awesome": "^4.3.0",
+    "istanbul": "^0.3.6",
     "istanbul-coveralls": "^1.0.1",
-    "jscs": "^1.8.1",
-    "lodash": "^2.4.1",
-    "tap-spec": "^2.1.0",
-    "tape": "^3.0.3"
+    "jscs": "^1.11.3",
+    "lodash.isplainobject": "^3.0.0",
+    "tap-spec": "^2.2.1",
+    "tape": "^3.5.0"
+  },
+  "jscsConfig": {
+    "preset": "google",
+    "maximumLineLength": 98,
+    "requireBlocksOnNewline": true,
+    "validateLineBreaks": "LF"
   }
 }
