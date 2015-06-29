@@ -3,22 +3,14 @@
   "version": "1.0.1",
   "description": "Parse CMap of a TrueType/OpenType font file buffer",
   "repository": "shinnn/node-font-cmap",
-  "author": {
-    "name": "Shinnosuke Watanabe",
-    "url": "https://github.com/shinnn"
-  },
+  "author": "Shinnosuke Watanabe (https://github.com/shinnn)",
   "scripts": {
-    "pretest": "eslint *.js test/test.js & jscs test/test.js",
+    "pretest": "eslint --config node_modules/@shinnn/eslintrc-node/rc.json --rule 'no-reserved-keys: 0' --rule 'no-process-exit: 0' cli.js index.js test",
     "test": "node test/test.js | tap-spec",
     "coverage": "istanbul cover --no-default-excludes -x=node_modules/** test/test.js",
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/shinnn/node-font-cmap/blob/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "files": [
     "cli.js",
     "index.js"
@@ -41,25 +33,19 @@
   "dependencies": {
     "chalk": "^1.0.0",
     "get-stdin": "^4.0.1",
-    "is-buffer": "^1.0.1",
-    "minimist": "^1.1.0",
-    "opentype.js": "^0.4.4",
-    "sum-up": "^1.0.1"
+    "is-buffer": "^1.0.2",
+    "minimist": "^1.1.1",
+    "opentype.js": "^0.4.9",
+    "sum-up": "^1.0.2"
   },
   "devDependencies": {
-    "eslint": "^0.15.0",
+    "@shinnn/eslintrc-node": "^1.0.2",
+    "eslint": "^0.24.0",
     "font-awesome": "^4.3.0",
-    "istanbul": "^0.3.6",
-    "istanbul-coveralls": "^1.0.1",
-    "jscs": "^1.11.3",
-    "lodash.isplainobject": "^3.0.0",
-    "tap-spec": "^2.2.1",
-    "tape": "^3.5.0"
-  },
-  "jscsConfig": {
-    "preset": "google",
-    "maximumLineLength": 98,
-    "requireBlocksOnNewline": true,
-    "validateLineBreaks": "LF"
+    "istanbul": "^0.3.17",
+    "istanbul-coveralls": "^1.0.3",
+    "lodash.isplainobject": "^3.1.0",
+    "tap-spec": "^4.0.2",
+    "tape": "^4.0.0"
   }
 }
